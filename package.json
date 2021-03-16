@@ -1,7 +1,7 @@
 {
   "name": "irregular-voronoi",
   "version": "1.0.0",
-  "description": "",
+  "description": "`irregular-voronoi` makes it dead simple to create voronoi like diagrams constrained to irregular polygons. It ensures that no returned polygon is a MultiPolygon. That each point is in only Polygon. And that all polygons contain a point.",
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
@@ -9,8 +9,8 @@
     "lint": "eslint '**/*.js'"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Crosscut",
+  "license": "MIT",
   "dependencies": {
     "@turf/bbox": "^6.3.0",
     "@turf/boolean-point-in-polygon": "^6.3.0",
@@ -18,7 +18,6 @@
     "@turf/union": "^6.3.0",
     "@turf/voronoi": "^6.3.0"
   },
-  "private": true,
   "devDependencies": {
     "prettier": "^2.2.1",
     "husky": "4.3.*",
@@ -75,5 +74,13 @@
       "/node_modules/"
     ],
     "collectCoverage": true
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crosscutio/irregular-voronoi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/crosscutio/irregular-voronoi/issues"
+  },
+  "homepage": "https://github.com/crosscutio/irregular-voronoi#readme"
 }

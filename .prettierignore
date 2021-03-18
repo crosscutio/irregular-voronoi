@@ -1,2 +1,2 @@
-mapbox-boundaries
+__fixtures__/*.json
 coverage

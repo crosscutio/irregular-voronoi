@@ -1,5 +1,6 @@
 "use strict";
 
+const stringify = require("json-stable-stringify");
 const irregularVoronoi = require("./index");
 const { writeFileSync } = require("fs");
 
@@ -15,7 +16,7 @@ test("works", () => {
     features: polys.concat(points),
   };
 
-  writeFileSync("./__fixtures__/result.json", JSON.stringify(fc));
+  writeFileSync("./__fixtures__/result.json", stringify(fc));
 
   expect(polys).toMatchSnapshot();
 });
@@ -30,7 +31,7 @@ test("works with crazy lakes", () => {
     features: polys.concat(points),
   };
 
-  writeFileSync("./__fixtures__/lake-result.json", JSON.stringify(fc));
+  writeFileSync("./__fixtures__/lake-result.json", stringify(fc));
 
   expect(polys).toMatchSnapshot();
 });

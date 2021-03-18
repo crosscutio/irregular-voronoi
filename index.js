@@ -18,31 +18,34 @@ function bboxPoly(bbox) {
 }
 
 module.exports = function (polygon, points) {
+  if (points.length === 1) return [polygon];
+
   const box = bbox(polygon);
   const mask = polygonClipping.difference(
     bboxPoly(box),
     polygon.geometry.coordinates
   );
-  if (mask.length === 0) throw Error("Failed to diff");
 
   const vorPolys = voronoi(
     { type: "FeatureCollection", features: points },
     { bbox: box }
-  ).features.reduce((m, f) => {
-    m.push(f.geometry.coordinates);
-    return m;
-  }, []);
+  ).features;
 
-  const polys = vorPolys.reduce((m, vp) => {
-    return m.concat(
-      polygonClipping.difference(vp, mask).map((coordinates) => {
-        return {
-          type: "Polygon",
-          coordinates,
-        };
-      })
-    );
-  }, []);
+  // The input polygon is a bbox, just return the normal voronoi polygons
+  if (mask.length === 0) return vorPolys;
+
+  const polys = vorPolys
+    .map((f) => f.geometry.coordinates)
+    .reduce((m, vp) => {
+      return m.concat(
+        polygonClipping.difference(vp, mask).map((coordinates) => {
+          return {
+            type: "Polygon",
+            coordinates,
+          };
+        })
+      );
+    }, []);
 
   const hasPoint = [];
   let noPoint = [];

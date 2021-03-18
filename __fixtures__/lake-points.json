@@ -1,0 +1,41 @@
+[
+  {
+    "id": "96",
+    "type": "Feature",
+    "properties": {
+      "Country": "Rwanda",
+      "Admin1": "East",
+      "Facility type": "Health Centre",
+      "Ownership": "Public",
+      "LL source": "GPS"
+    },
+    "geometry": { "type": "Point", "coordinates": [30.3729, -2.1107] },
+    "block": "26977"
+  },
+  {
+    "id": "105",
+    "type": "Feature",
+    "properties": {
+      "Country": "Rwanda",
+      "Admin1": "East",
+      "Facility type": "Health Post ",
+      "Ownership": "Public",
+      "LL source": "Geonames"
+    },
+    "geometry": { "type": "Point", "coordinates": [30.3315, -2.1817] },
+    "block": "26977"
+  },
+  {
+    "id": "112",
+    "type": "Feature",
+    "properties": {
+      "Country": "Rwanda",
+      "Admin1": "East",
+      "Facility type": "Health Centre",
+      "Ownership": "Public",
+      "LL source": "GPS"
+    },
+    "geometry": { "type": "Point", "coordinates": [30.3854, -2.2165] },
+    "block": "26977"
+  }
+]

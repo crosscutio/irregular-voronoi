@@ -1,44 +1,51 @@
 "use strict";
 const bbox = require("@turf/bbox").default;
 const voronoi = require("@turf/voronoi");
-const difference = require("@turf/difference");
 const pointInPoly = require("@turf/boolean-point-in-polygon").default;
-const union = require("@turf/union").default;
+const polygonClipping = require("polygon-clipping");
+
+function bboxPoly(bbox) {
+  const [minx, miny, maxx, maxy] = bbox;
+  return [
+    [
+      [minx, miny],
+      [maxx, miny],
+      [maxx, maxy],
+      [minx, maxy],
+      [minx, miny],
+    ],
+  ];
+}
 
 module.exports = function (polygon, points) {
   const box = bbox(polygon);
-  const polys = voronoi(
+  const mask = polygonClipping.difference(
+    bboxPoly(box),
+    polygon.geometry.coordinates
+  );
+  if (mask.length === 0) throw Error("Failed to diff");
+
+  const vorPolys = voronoi(
     { type: "FeatureCollection", features: points },
     { bbox: box }
   ).features.reduce((m, f) => {
-    const mask = difference(f, polygon);
-    if (mask === null) {
-      m.push(f);
-      return m;
-    }
-
-    const out = difference(f, mask);
-    if (out.geometry.type === "Polygon") {
-      m.push(out);
-      return m;
-    }
-
-    out.geometry.coordinates.forEach((lr) => {
-      m.push({
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "Polygon",
-          coordinates: lr,
-        },
-      });
-    });
-
+    m.push(f.geometry.coordinates);
     return m;
   }, []);
 
+  const polys = vorPolys.reduce((m, vp) => {
+    return m.concat(
+      polygonClipping.difference(vp, mask).map((coordinates) => {
+        return {
+          type: "Polygon",
+          coordinates,
+        };
+      })
+    );
+  }, []);
+
   const hasPoint = [];
-  const noPoint = [];
+  let noPoint = [];
   for (const poly of polys) {
     let found = false;
     for (const point of points) {
@@ -49,16 +56,29 @@ module.exports = function (polygon, points) {
     if (found) {
       hasPoint.push(poly);
     } else {
-      noPoint.push(poly);
+      noPoint.push(poly.coordinates);
     }
   }
+
+  if (noPoint.length > 1) {
+    noPoint = polygonClipping.union(...noPoint);
+  }
+  noPoint = noPoint.map((coordinates) => {
+    return {
+      type: "Polygon",
+      coordinates,
+    };
+  });
 
   for (const poly of noPoint) {
     let merged = false;
     for (let i = 0; i < hasPoint.length; i++) {
-      const one = union(poly, hasPoint[i]);
-      if (one.geometry.type === "Polygon") {
-        hasPoint[i] = one;
+      const one = polygonClipping.union(
+        poly.coordinates,
+        hasPoint[i].coordinates
+      );
+      if (one.length === 1) {
+        hasPoint[i].coordinates = one[0];
         merged = true;
         break;
       }
@@ -68,5 +88,11 @@ module.exports = function (polygon, points) {
     }
   }
 
-  return hasPoint;
+  return hasPoint.map((geometry) => {
+    return {
+      type: "Feature",
+      properties: {},
+      geometry,
+    };
+  });
 };

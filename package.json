@@ -14,9 +14,8 @@
   "dependencies": {
     "@turf/bbox": "^6.3.0",
     "@turf/boolean-point-in-polygon": "^6.3.0",
-    "@turf/difference": "^6.3.0",
-    "@turf/union": "^6.3.0",
-    "@turf/voronoi": "^6.3.0"
+    "@turf/voronoi": "^6.3.0",
+    "polygon-clipping": "^0.15.2"
   },
   "devDependencies": {
     "prettier": "^2.2.1",

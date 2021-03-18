@@ -19,3 +19,18 @@ test("works", () => {
 
   expect(polys).toMatchSnapshot();
 });
+
+test("works with crazy lakes", () => {
+  const polygon = require("./__fixtures__/lake.json");
+  const points = require("./__fixtures__/lake-points.json");
+
+  const polys = irregularVoronoi(polygon, points);
+  const fc = {
+    type: "FeatureCollection",
+    features: polys.concat(points),
+  };
+
+  writeFileSync("./__fixtures__/lake-result.json", JSON.stringify(fc));
+
+  expect(polys).toMatchSnapshot();
+});

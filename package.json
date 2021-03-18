@@ -1,6 +1,6 @@
 {
   "name": "irregular-voronoi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "`irregular-voronoi` makes it dead simple to create voronoi like diagrams constrained to irregular polygons. It ensures that no returned polygon is a MultiPolygon. That each point is in only Polygon. And that all polygons contain a point.",
   "main": "index.js",
   "scripts": {

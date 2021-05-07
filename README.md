@@ -7,7 +7,7 @@
 ## Usage
 
 ```js
-const irregularVoronoi = require('irrgular-voronoi');
+const irregularVoronoi = require('irregular-voronoi');
 
 const polygon = { ... };
 const points = [ ... ];
